@@ -1,0 +1,2933 @@
+body {
+  font-family: 'Orbitron', sans-serif;
+  background-color: #0a0f1a;
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  position: relative; /* Necessário para o overlay de scanlines */
+}
+
+/* Efeito de Scanlines para a tela toda */
+body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(72, 202, 228, 0.05) 3px, rgba(72, 202, 228, 0.05) 4px);
+  pointer-events: none;
+  z-index: 999;
+  animation: scanline 10s linear infinite;
+}
+
+.background-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}
+
+.hero-screen {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly; /* Distribui o espaço uniformemente, evitando que o título seja cortado */
+  gap: 1rem; /* Restaura um espaçamento agradável */
+  min-height: 100vh; /* Usa min-height para permitir que o conteúdo cresça com o zoom */
+  padding: 2rem; /* Adiciona padding para evitar que o conteúdo cole nas bordas com zoom */
+  overflow-x: hidden; /* Previne scroll horizontal de animações, mas permite o vertical se necessário */
+}
+
+.title {
+  font-size: clamp(4rem, 12vw, 8rem); /* Fonte responsiva ajustada para o título mais curto */
+  color: #82d0e4;
+  font-weight: 800;  
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 25px rgba(123, 44, 191, 0.8);
+  animation: title-pulse 3s ease-in-out infinite, hero-title-in 1s ease-out;
+}
+
+.btn {
+  background: linear-gradient(45deg, #1e1e2f, #2a2a3f); /* Fundo com gradiente sutil */
+  border: 2px solid #48cae4;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem; /* Tamanho do texto mais reduzido */
+  text-shadow: 0 0 8px rgba(72, 202, 228, 0.8);
+  padding: 0.8rem 2.2rem; /* Padding mais reduzido */
+  margin: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(72, 202, 228, 0.4), inset 0 0 15px rgba(72, 202, 228, 0.2);
+  z-index: 1;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  border-color: #ffc300;
+  color: #ffc300;
+  text-shadow: 0 0 10px #ffc300;
+  box-shadow: 0 0 25px #ffc300, inset 0 0 20px rgba(255, 195, 0, 0.3);
+  animation: btn-glitch 0.5s infinite;
+}
+
+.btn-tutorial {
+  border-color: #ffc300;
+  color: #ffc300;
+  text-shadow: 0 0 10px #ffc300;
+  box-shadow: 0 0 25px #ffc300, inset 0 0 20px rgba(255, 195, 0, 0.3);
+  animation: tutorial-button-pulse 2s infinite;
+}
+
+.btn-secondary {
+  font-size: 1rem; /* Reduzido proporcionalmente */
+  padding: 0.7rem 2rem; /* Reduzido proporcionalmente */
+  background: rgba(123, 44, 191, 0.1);
+  border-color: #7b2cbf;
+  color: #c095e6;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(123, 44, 191, 0.2);
+  border-color: #c095e6;
+  color: #fff;
+  text-shadow: 0 0 8px #c095e6;
+  box-shadow: none;
+  animation: none;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, transparent 30%, #48cae4 50%, transparent 70%);
+  border-image-slice: 1;
+  z-index: -1; /* Garante que a borda animada fique atrás do conteúdo */
+  animation: border-flow 3s linear infinite;
+}
+
+.card-showcase-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Necessário para posicionar o rótulo */
+  min-height: 180px; /* Altura MÍNIMA reduzida para compactar o layout */
+  animation: hero-elements-in 1s 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.card-showcase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+.showcase-card {
+  width: 140px; /* Tamanho ligeiramente reduzido */
+  height: 203px; /* Tamanho ligeiramente reduzido */
+  position: absolute; /* Permite o empilhamento e a transformação 3D */
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #48cae4;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(72, 202, 228, 0.5);
+  transition: all 0.3s ease;
+}
+
+.showcase-card:nth-child(1) {
+  transform: perspective(1000px) translateX(-110px) rotateY(35deg) scale(0.9);
+  z-index: 1;
+}
+
+.showcase-card:nth-child(2) {
+  transform: perspective(1000px) scale(1);
+  z-index: 3; /* Carta central fica na frente */
+}
+
+.showcase-card:nth-child(3) {
+  transform: perspective(1000px) translateX(110px) rotateY(-35deg) scale(0.9);
+  z-index: 2;
+}
+
+.showcase-card:hover {
+  transform: perspective(1000px) scale(1.1) translateY(-20px);
+  box-shadow: 0 0 25px #7b2cbf;
+  border-color: #7b2cbf;
+  z-index: 5; /* Garante que a carta em hover fique na frente de tudo */
+}
+
+/* Ajusta o hover das cartas laterais para que elas se endireitem */
+.showcase-card:nth-child(1):hover, .showcase-card:nth-child(3):hover {
+  transform: perspective(1000px) scale(1.1) translateY(-20px) rotateY(0deg);
+}
+
+.hero-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* Aumenta o espaço entre o botão de tutorial e os de dificuldade */
+  animation: hero-elements-in 1s 0.9s ease-out forwards;
+  opacity: 0; /* Começa invisível */
+  background-color: rgba(10, 15, 26, 0.6);
+  padding: 1.5rem 3rem;
+  border-radius: 15px;
+  border-top: 2px solid #7b2cbf;
+  border-bottom: 2px solid #7b2cbf;
+}
+
+.hero-difficulty-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.settings-menu {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(10, 15, 26, 0.7);
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.hints-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  color: #cdeefd;
+  cursor: pointer;
+}
+
+/* Layout principal da aplicação */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Estilos do Campo de Duelo */
+.board-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.board {
+  width: 100%;
+  flex-grow: 1; /* Ocupa o espaço vertical disponível */
+  display: grid;
+  align-items: start; /* CORREÇÃO: Alinha o campo no topo, respeitando o padding-bottom */
+  justify-content: center;
+  padding-bottom: 120px; /* REDUZIDO: Diminui o espaço morto na parte inferior */
+  position: relative; 
+  z-index: 1; /* Garante que o tabuleiro fique acima do fundo, mas abaixo do HUD */
+}
+
+.board-surface {
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.player-zone {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center; 
+  gap: 10px;
+  padding: 15px;
+  background: rgba(30, 30, 47, 0.5);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.main-zones {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.monster-field-zone, .spell-trap-field-zone {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card-slot:empty::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5rem;
+  color: rgba(72, 202, 228, 0.1);
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.monster-zone:empty::after {
+  content: '⬢'; /* Hexágono para monstros */
+}
+
+.spell-trap-zone:empty::after {
+  content: '❖'; /* Losango para magias/armadilhas */
+}
+
+.extra-zone {
+  background-size: cover;
+  background-position: center;
+}
+
+.deck-zone:empty::after, .deck-zone.has-cards::after {
+  content: '📚'; /* Ícone de Deck */
+  font-size: 2.5rem;
+}
+
+.graveyard-zone.has-cards {
+  background-color: rgba(10, 15, 26, 0.8);
+  background-blend-mode: luminosity;
+}
+
+.graveyard-zone:empty::after, .graveyard-zone.has-cards::after {
+  content: '💀'; /* Ícone de Cemitério */
+  font-size: 2.5rem;
+}
+
+.card-count {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-shadow: 1px 1px 2px black;
+  z-index: 2;
+}
+
+.card-slot:hover:empty::after {
+  color: rgba(72, 202, 228, 0.5); /* Ciano, para consistência */
+  text-shadow: 0 0 10px #48cae4;
+}
+
+.card-slot {
+  width: 6vw; /* Largura baseada na largura da tela */
+  height: 8.5vw; /* Altura proporcional */
+  max-width: 90px; /* Limite máximo para telas grandes */
+  max-height: 130px; /* Limite máximo para telas grandes */
+  background-color: rgba(30, 30, 47, 0.8);
+  border: 1px solid #48cae4;
+  border-radius: 5px;
+  box-shadow: inset 0 0 8px rgba(72, 202, 228, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.spell-trap-zone {
+  height: 6.5vw; /* Mais baixo que os slots de monstro */
+  max-height: 100px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 8px rgba(72, 202, 228, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-slot.valid-target {
+  border-color: #e63946; /* Vermelho para alvos de ataque */
+  box-shadow: inset 0 0 15px #e63946, 0 0 10px #e63946;
+}
+
+.center-line {
+  width: 100%;
+  height: 4px;
+  background: #7b2cbf;
+  box-shadow: 0 0 10px #7b2cbf, 0 0 20px #7b2cbf;
+  animation: center-line-flicker 2s linear infinite;
+}
+
+.field-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* Espaço entre o rótulo e o campo */
+}
+
+.field-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #48cae4;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(72, 202, 228, 0.7);
+}
+
+/* Estilos da UI do Jogo (HUD) */
+.hud {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  pointer-events: none; /* Permite clicar através do container */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100; /* Garante que a mão fique acima do campo */
+}
+
+.hand-container {
+  display: flex; /* Mantém flex para o alinhamento das cartas */
+  justify-content: center;
+  flex-grow: 1;
+  padding-bottom: 10px; /* Apenas um pequeno padding na base */
+  pointer-events: all; /* Habilita eventos de mouse para as cartas */
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+.card-in-hand {
+  width: 6.5vw; /* Largura baseada na largura da tela (reduzida) */
+  height: 9.4vw; /* Altura proporcional (reduzida) */
+  min-width: 65px; /* Garante que não fiquem pequenas demais (reduzido) */
+  min-height: 94px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #48cae4;
+  border-radius: 5px;
+  cursor: grab;
+  transition: transform 0.2s ease-out, box-shadow 0.2s;
+  position: relative; /* Necessário para o hover */
+  /* Cria o efeito de sobreposição */
+  margin-left: -45px; /* Aumenta a sobreposição para compactar a mão */
+}
+
+/* --- Efeito de Brilho para Cartas Raras --- */
+.card-in-hand.foil::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%; /* Começa fora da carta */
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: foil-shine 5s infinite linear;
+  animation-delay: var(--animation-delay, 0s); /* Atraso aleatório para cada carta */
+}
+
+.card-in-hand.foil:hover::after {
+  animation-play-state: paused; /* Pausa a animação no hover para não distrair */
+}
+
+@keyframes foil-shine {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+.card-in-hand-stats {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  background-color: rgba(10, 15, 26, 0.85);
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.0rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border-top: 1px solid #ffc300;
+  border-left: 1px solid #ffc300;
+  text-shadow: 1px 1px 2px #000;
+  pointer-events: none; /* Garante que os stats não interfiram no clique da carta */
+}
+
+.card-tribute-cost {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background-color: #7b2cbf;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ffc300;
+}
+
+.card-in-hand:hover {
+  transform: translateY(-20px) scale(1.1);
+  z-index: 100; /* Garante que a carta em hover fique na frente de todas as outras */
+  transition: transform 0.2s ease-out, box-shadow 0.2s, z-index 0s 0s;
+}
+
+.card-in-hand.selected {
+  transform: translateY(-20px) scale(1.1);
+  box-shadow: 0 0 20px #ffc300, 0 0 30px #ffc300;
+  border-color: #ffc300;
+}
+
+.card-in-hand.unplayable {
+  filter: grayscale(80%) brightness(0.7);
+  cursor: not-allowed;
+}
+
+.card-in-hand.dragging {
+  opacity: 0.4;
+}
+
+.inspect-btn {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(123, 44, 191, 0.8);
+  border: 1px solid #ffc300;
+  color: #ffc300;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0;
+  animation: fade-in 0.3s 0.2s forwards;
+}
+
+.card-slot.summon-highlight {
+  border-color: #48cae4; /* Ciano para zonas válidas */
+  box-shadow: inset 0 0 20px #48cae4, 0 0 15px #48cae4;
+}
+
+.card-back {
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/img/card-back.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+}
+
+.card-on-field {
+  width: 100%;
+  height: 100%;
+  pointer-events: all; /* Habilita cliques nas cartas */
+  background-size: cover;
+  background-position: center;
+  transition: all 0.3s ease;
+}
+
+.card-on-field-stats {
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  background-color: rgba(10, 15, 26, 0.9);
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.0rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border-top: 1px solid #ffc300;
+  border-left: 1px solid #ffc300;
+  text-shadow: 1px 1px 2px #000;
+  pointer-events: none;
+}
+
+.card-on-field.can-attack {
+  box-shadow: 0 0 15px #ffc300, inset 0 0 10px rgba(255, 195, 0, 0.5);
+  animation: can-attack-pulse 2s infinite;
+  cursor: pointer;
+}
+.card-on-field.can-attack {
+  cursor: grab;
+}
+
+.card-on-field.dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+}
+
+.targeting-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2000;
+}
+
+.targeting-line line {
+  stroke: #e63946;
+  stroke-width: 4;
+  stroke-dasharray: 10, 5;
+  filter: drop-shadow(0 0 5px #e63946);
+}
+
+.card-on-field.can-attack::after {
+  content: '⚡';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 1.5rem;
+  text-shadow: 0 0 5px #000, 0 0 10px #ffc300;
+}
+
+.card-on-field.selected-attacker {
+  box-shadow: 0 0 20px 5px #ffc300, inset 0 0 15px #ffc300;
+  transform: scale(1.05);
+  border: 2px solid #ffc300;
+}
+
+.is-targeting .card-on-field.targetable {
+  cursor: crosshair;
+  box-shadow: 0 0 20px 5px #e63946; /* Vermelho para indicar alvo */
+  animation: target-pulse 1.5s infinite;
+}
+
+.is-targeting .card-on-field:not(.targetable) {
+  opacity: 0.6;
+}
+
+.card-on-field.attacking {
+  z-index: 10;
+  transform: scale(1.1) translateY(-10px);
+  box-shadow: 0 0 25px 10px #e63946;
+  animation: attack-shake 0.5s;
+}
+
+.card-on-field.defending {
+  z-index: 9;
+  animation: defend-shake 0.3s;
+  box-shadow: 0 0 25px 10px #48cae4;
+}
+
+.card-on-field.tributable {
+  cursor: pointer;
+  box-shadow: 0 0 20px 5px #c095e6; /* Roxo para indicar tributo */
+  animation: target-pulse 1.5s infinite;
+}
+
+.card-on-field.tribute-selected {
+  box-shadow: 0 0 30px 10px #ff00ff; /* Magenta para confirmar seleção */
+  opacity: 0.5;
+}
+
+.card-on-field.tributable {
+  cursor: pointer;
+  box-shadow: 0 0 20px 5px #c095e6; /* Roxo para indicar tributo */
+  animation: target-pulse 1.5s infinite;
+}
+
+.card-on-field.tribute-selected {
+  box-shadow: 0 0 30px 10px #ff00ff; /* Magenta para confirmar seleção */
+  opacity: 0.5;
+}
+
+.card-on-field.has-attacked {
+  opacity: 0.6;
+  filter: saturate(0.5);
+}
+
+.card-on-field.has-attacked::after {
+  content: '✓';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: rgba(10, 15, 26, 0.7);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-shadow: 0 0 5px #000;
+}
+
+.card-on-field.defense-position {
+  transform-origin: center center;
+  transition: transform 0.4s ease;
+  transform: rotate(90deg);
+}
+
+.hud-left,
+.hud-right {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Faz os botões ocuparem a largura total */
+  gap: 1rem; /* Reduz o espaçamento geral */
+  padding: 10px; /* Padding reduzido */
+  pointer-events: none; /* **CORREÇÃO**: O painel em si não deve ser clicável. */
+  width: clamp(220px, 18vw, 280px); /* Reduz a largura dos painéis */
+  max-height: 90vh; /* Usa max-height para flexibilidade */
+  background: rgba(10, 15, 26, 0.6);
+  backdrop-filter: blur(5px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Animação de deslize */
+}
+.hud-settings-container {
+  padding: 0.5rem;
+  background-color: rgba(10, 15, 26, 0.5);
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.hud-left {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: all; /* **CORREÇÃO**: Reativa os cliques apenas na área visível do painel. */
+  display: flex; /* Garante que os filhos (LP, Log) se alinhem verticalmente */
+  flex-direction: column;
+  width: clamp(220px, 18vw, 280px); /* Garante que tenha a mesma largura do painel direito */
+}
+
+.hud-left.collapsed {
+  /* Move o painel para fora, mas mantém o botão visível */
+  transform: translateY(-50%) translateX(calc(-100% - 20px));
+}
+
+
+.hud-right {
+  position: fixed;
+  right: 20px;
+  top: 90px; /* **CORREÇÃO**: Move o painel para baixo, abrindo espaço para o botão de sair. */
+  justify-content: space-between; /* Alinha o turno no topo e os botões na base */
+  pointer-events: all; /* **CORREÇÃO**: Reativa os cliques apenas na área visível do painel. */
+  justify-content: flex-start; /* Alinha tudo ao topo */
+  /* transform: translateY(-50%); */ /* Não é mais necessário com o posicionamento a partir do topo. */
+  overflow-y: auto; /* **NOVO**: Adiciona barra de rolagem quando necessário. */
+}
+
+.hud-right.collapsed {
+  /* Move o painel para fora, mas mantém o botão visível */
+  transform: translateY(-50%) translateX(calc(100% + 20px));
+}
+
+/* --- Estilos dos Botões de Toggle dos Painéis --- */
+.hud-panel-toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 80px;
+  background-color: #7b2cbf;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  z-index: 1; /* Fica na frente do painel */
+  transition: background-color 0.3s, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.left-toggle {
+  right: -25px;
+  border-radius: 0 10px 10px 0;
+}
+
+.hud-left.collapsed .left-toggle {
+  transform: translateY(-50%) scaleX(-1); /* Inverte o botão para apontar para dentro */
+}
+
+.right-toggle {
+  left: -25px;
+  border-radius: 10px 0 0 10px;
+}
+
+.hud-right.collapsed .right-toggle {
+  transform: translateY(-50%) scaleX(-1); /* Inverte o botão para apontar para dentro */
+}
+
+.hud-divider {
+  width: 100%;
+  height: 2px;
+  background: #7b2cbf;
+  box-shadow: 0 0 10px #7b2cbf;
+  margin: 1rem 0;
+}
+
+.hud-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* **REDUZIDO**: Diminui o espaço entre os botões. */
+}
+
+.turn-info {
+  width: 100%;
+  background-color: rgba(30, 30, 47, 0.8);
+  padding: 0.8rem 1rem; /* Padding reduzido */
+  border: 1px solid #48cae4;
+  border-radius: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Faz os filhos ocuparem a largura */
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.opponent-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem; /* Fonte reduzida */
+}
+
+.turn-phase-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid rgba(72, 202, 228, 0.5);
+  padding-top: 0.8rem;
+}
+
+.turn-counter {
+  font-weight: 700;
+  font-size: 1rem; /* Fonte reduzida */
+  color: #ffc300;
+}
+
+.turn-counter span {
+  font-size: 1.3rem; /* Fonte reduzida */
+  margin-left: 0.5rem;
+}
+
+.opponent-hand-counter {
+  font-size: 1rem; /* Fonte reduzida */
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-weight: 700;
+  color: #ffc300;
+}
+
+.opponent-hand-counter svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+.opponent-hand-counter span {
+  font-size: 1.1rem; /* Fonte reduzida */
+}
+
+.life-points {
+  font-size: 1.2rem;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Reduz o espaço entre os painéis de LP */
+}
+
+.lp-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.avatar {
+  width: 50px; /* Avatar menor */
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #48cae4;
+  box-shadow: 0 0 10px #48cae4;
+}
+
+.opponent-lp-container .avatar {
+  border-color: #ffc300;
+  box-shadow: 0 0 10px #ffc300;
+}
+
+.lp-details {
+  flex-grow: 1;
+}
+
+.lp-bar {
+  height: 10px;
+  background-color: #1e1e2f;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.lp-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.5s ease-out;
+}
+
+.player-lp {
+  background: linear-gradient(90deg, #48cae4, #7b2cbf);
+}
+
+.opponent-lp {
+  background: linear-gradient(90deg, #ffc300, #e85d04);
+}
+
+.lp-display {
+  color: #48cae4;
+}
+
+.hud-btn {
+  width: 100%;
+  padding: 0.6rem 0.8rem; /* **REDUZIDO**: Padding menor para botões mais compactos. */
+  font-size: 0.9rem; /* **REDUZIDO**: Fonte menor. */
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* **REDUZIDO**: Espaço menor entre ícone e texto. */
+  animation: none; /* Remove a animação de pulso dos botões do HUD */
+}
+
+.hud-btn svg { /* Alvo para os ícones Feather */
+  width: 16px; /* **REDUZIDO**: Ícones menores. */
+  height: 16px;
+  stroke-width: 3; /* Deixa as linhas dos ícones mais grossas */
+  vertical-align: middle; /* Alinha o ícone com o texto */
+}
+
+.return-menu-btn {
+  border-color: #7b2cbf;
+  color: #7b2cbf;
+}
+
+.return-menu-btn:hover {
+  border-color: #ffc300;
+  color: #ffc300;
+  box-shadow: 0 0 15px #ffc300;
+}
+
+.deck-builder-btn {
+  border-color: #48cae4;
+  color: #48cae4;
+}
+
+/* Estilos do Tooltip de Nome da Carta */
+.card-name-tooltip {
+  position: fixed;
+  background-color: rgba(10, 15, 26, 0.9);
+  color: #ffc300;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 1200;
+  white-space: nowrap;
+}
+
+.card-name-tooltip.hidden {
+  display: none;
+}
+
+.detail-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  background: none;
+  border: 1px solid #48cae4;
+  color: #48cae4;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.detail-close-btn:hover {
+  background-color: #48cae4;
+  color: #1e1e2f;
+  transform: rotate(90deg);
+}
+
+/* --- Estilos do Painel de Dados Tático --- */
+.tactical-panel {
+  width: 90vw;
+  max-width: 600px;
+  background: linear-gradient(145deg, #1e1e2f, #10101a);
+  border: 2px solid #48cae4;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 25px rgba(72, 202, 228, 0.3), inset 0 0 15px rgba(72, 202, 228, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  /* Adiciona cantos decorativos */
+  background-clip: padding-box;
+  border: solid 2px transparent;
+}
+
+.tactical-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(to right, #7b2cbf, #48cae4);
+}
+
+.tactical-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #ffc300;
+  text-align: center;
+  text-shadow: 0 0 10px #ffc300;
+  margin-bottom: 0.5rem;
+}
+
+.tactical-type-line {
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  color: #48cae4;
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.tactical-effect-box {
+  background-color: rgba(10, 15, 26, 0.7);
+  padding: 1rem;
+  border-radius: 5px;
+  height: 150px;
+  overflow-y: auto;
+  font-family: 'Roboto', sans-serif; /* Fonte mais limpa para leitura */
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #e0e0e0;
+  border-left: 3px solid #7b2cbf;
+}
+
+.tactical-stats-footer {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 0.8rem;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Estilos da Biblioteca de Cartas */
+.library-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.85);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 1500;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.library-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.library-modal {
+  width: 90%;
+  max-width: 900px;
+  max-height: 85vh; /* Usa max-height para flexibilidade */
+  background-color: #1e1e2f;
+  border: 2px solid #48cae4;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto; /* Adiciona scroll se o conteúdo transbordar com o zoom */
+}
+
+.library-modal h2 {
+  text-align: center;
+  color: #48cae4;
+  margin-bottom: 1rem;
+}
+
+.library-filter-pane {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(72, 202, 228, 0.3);
+}
+
+.library-filter-pane input, .library-filter-pane select {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: rgba(10, 15, 26, 0.8);
+  border: 1px solid #48cae4;
+  border-radius: 5px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+}
+
+.library-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: 1px solid #48cae4;
+  color: #48cae4;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.library-content {
+  display: flex;
+  gap: 1.5rem;
+  flex-grow: 1;
+}
+
+.library-list {
+  width: 30%;
+  overflow-y: auto;
+  border-right: 1px solid #48cae4;
+  padding-right: 1rem;
+}
+
+.library-card-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.library-card-item:hover, .library-card-item.active {
+  background-color: #7b2cbf;
+  color: #fff;
+}
+
+.library-card-item.unowned .library-card-name {
+  color: #6c757d; /* Cinza para indicar que não possui */
+  font-style: italic;
+}
+
+.library-card-count {
+  font-weight: bold;
+  color: #ffc300;
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.library-detail {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Novo Painel de Detalhes Tático --- */
+.tactical-panel-new {
+  width: 100%;
+  max-width: 500px; /* Largura máxima do painel */
+  background: linear-gradient(145deg, #1e1e2f, #10101a);
+  border: 2px solid #48cae4;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 0 25px rgba(72, 202, 228, 0.3), inset 0 0 15px rgba(72, 202, 228, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tactical-art-viewport {
+  width: 100%;
+  height: 300px; /* Altura aumentada para a imagem */
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #7b2cbf;
+  margin-bottom: 0.5rem;
+}
+
+.tactical-art-viewport img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem inteira seja visível */
+}
+
+.tactical-name-new {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  color: #ffc300;
+  text-align: center;
+  text-shadow: 0 0 10px #ffc300;
+}
+
+.tactical-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 0.8rem;
+  border-radius: 5px;
+}
+
+.info-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.info-box.full-width {
+  grid-column: 1 / -1; /* Ocupa a linha inteira */
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: #48cae4;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.tactical-effect-box-new {
+  background-color: rgba(10, 15, 26, 0.7);
+  padding: 1rem;
+  border-radius: 5px;
+  min-height: 100px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #e0e0e0;
+  border-left: 3px solid #7b2cbf;
+}
+
+/* --- Fim do Novo Painel de Detalhes Tático --- */
+
+.cointoss-avatar.selected .cointoss-text {
+  animation: cointoss-fade-in 0.5s forwards;
+}
+
+/* Animações da Hero Page */
+@keyframes hero-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-elements-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes attack-shake {
+  0%, 100% { transform: scale(1.1) translateY(-10px) translateX(0); }
+  25% { transform: scale(1.1) translateY(-10px) translateX(-5px); }
+  75% { transform: scale(1.1) translateY(-10px) translateX(5px); }
+}
+
+@keyframes defend-shake {
+  0%, 100% { transform: scale(1) rotate(0); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+
+.card-on-field.defense-position.defending {
+  animation: defend-shake-horizontal 0.3s;
+}
+
+/* --- Media Queries para Responsividade --- */
+@media (max-width: 1024px) and (orientation: landscape) {
+  /* Ajusta o tamanho das cartas para telas menores */
+  .card-slot {
+    width: 8.5vw;
+    height: 12vw;
+  }
+
+  .card-in-hand {
+    width: 10vw;
+    height: 14.5vw;
+  }
+
+  /* Ajusta o tamanho da carta em defesa */
+  .card-on-field.defense-position {
+    width: 12vw;
+    height: 8.5vw;
+  }
+
+  /* Reduz o espaço entre as cartas na mão */
+  .hand-container {
+    gap: 5px;
+  }
+
+  .hud-left, .hud-right {
+    width: clamp(160px, 20vw, 220px);
+    padding: 10px;
+    gap: 0.5rem;
+  }
+
+  /* Garante que os botões sejam fáceis de tocar */
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .hud-btn {
+    padding: 0.8rem; /* Aumenta a área de toque interna */
+    font-size: 0.9rem;
+    min-height: 44px; /* Garante uma altura mínima para o toque */
+  }
+
+  /* Melhora a legibilidade do log */
+  .action-log {
+    width: clamp(220px, 25vw, 280px); /* Largura flexível */
+    height: 30vh; /* Altura baseada na altura da tela */
+    font-size: 0.9rem; /* Fonte maior e mais legível */
+  }
+
+  /* Torna o modal de detalhes mais adaptável */
+  .tactical-panel-new {
+    width: clamp(280px, 80vw, 500px);
+    padding: 1.5rem;
+  }
+
+  .tactical-name-new {
+    font-size: 1.5rem;
+  }
+
+  .tactical-effect-box-new {
+    font-size: 0.9rem;
+  }
+}
+
+.tutorial-modal {
+  width: auto; /* Largura baseada no conteúdo */
+  max-width: 550px; /* Largura máxima reduzida */
+  background-color: #1e1e2f;
+  border: 2px solid #7b2cbf;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(123, 44, 191, 0.6);
+}
+
+.tutorial-modal h2 {
+  font-size: 2rem;
+  color: #ffc300;
+  margin-bottom: 1rem;
+}
+
+.tutorial-subtitle {
+  font-size: 1.2rem;
+  color: #48cae4;
+  font-weight: 700;
+  margin-bottom: 0.5rem !important; /* Sobrescreve a margem padrão */
+}
+
+.tutorial-modal p {
+  font-size: 1.1rem;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.tutorial-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.phase-timeline {
+  font-size: 1.1rem; /* Aumenta o tamanho da fonte */
+}
+
+.phase-main.active {
+  color: #48cae4; /* Ciano para Fase Principal 1 */
+}
+
+.phase-battle.active {
+  color: #e63946; /* Vermelho para Fase de Batalha */
+}
+
+.phase-main.active:nth-child(5) { /* Alvo para a Main Phase 2 */
+  color: #c095e6;
+}
+
+/* Estilos do Log de Ações e Informações Contextuais */
+
+.action-log {
+  width: 100%;
+  height: 100%; /* Garante que o log ocupe todo o espaço do painel */
+  overflow-y: auto;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+}
+.action-log-panel {
+  flex-grow: 1; /* Ocupa o espaço restante no painel esquerdo */
+  overflow: hidden; /* Garante que o conteúdo não transborde o container */
+  display: flex; /* Adicionado para que o filho .action-log possa ter height: 100% */
+  flex-direction: column;
+}
+
+.log-entry {
+  display: flex;
+  align-items: flex-start; /* Alinha ícone e texto no topo */
+  gap: 0.8rem;
+  padding: 10px 15px; /* Aumenta o padding interno */
+  border-radius: 4px;
+  margin-bottom: 5px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  position: relative; /* Necessário para o pseudo-elemento de highlight */
+}
+
+.log-entry.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.log-entry .log-icon {
+  font-size: 1.2rem;
+}
+
+.log-message-content {
+  display: flex;
+  width: 100%; /* Garante que o conteúdo ocupe o espaço */
+  flex-direction: column;
+}
+
+.log-message-main {
+  font-weight: 500;
+}
+
+.log-message-sub {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.log-turn-divider {
+  font-weight: 700;
+  text-align: center;
+  color: #c095e6;
+  background-color: rgba(123, 44, 191, 0.2);
+  margin: 10px 0;
+  justify-content: center; /* Centraliza o conteúdo do flex */
+}
+
+.log-turn-divider .log-icon { display: none; }
+
+.log-entry::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s;
+}
+
+.log-summon {
+  color: #cdeefd;
+}
+.log-summon.visible::before { background-color: rgba(72, 202, 228, 0.1); opacity: 1; }
+
+.log-draw {
+  color: #fff099;
+}
+.log-draw.visible::before { background-color: rgba(255, 195, 0, 0.1); opacity: 1; }
+
+.log-damage {
+  color: #ffc2c7;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-shadow: 0 0 8px #e63946;
+}
+.log-damage.visible::before { background-color: rgba(230, 57, 70, 0.2); opacity: 1; }
+
+.log-destruction, .log-battle {
+  color: #ffc2c7;
+}
+
+.log-system {
+  font-style: italic;
+  color: #999;
+  background-color: rgba(153, 153, 153, 0.1);
+}
+
+.log-effect {
+  color: #e6c6ff;
+}
+.log-effect.visible::before { background-color: rgba(123, 44, 191, 0.15); opacity: 1; }
+
+
+.info-card-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 320px;
+  background: rgba(10, 15, 26, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid #7b2cbf;
+  border-radius: 10px;
+  padding: 15px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.info-card-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.info-card-name {
+  font-size: 1.2rem;
+  color: #ffc300;
+  text-align: center;
+  margin: 0;
+}
+
+.info-card-stats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.info-card-stats .stat-box {
+  text-align: center;
+}
+
+.info-card-stats .stat-label {
+  font-size: 1rem;
+  color: #48cae4;
+}
+
+.info-card-stats .stat-value {
+  font-size: 2.5rem; /* Fonte grande para ATK/DEF */
+  font-weight: 700;
+}
+
+.info-card-effect {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+.log-message strong {
+  color: #ffc300;
+  font-weight: 700;
+}
+
+/* --- Animação de Transição de Fase --- */
+.phase-transition-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  font-size: 6rem;
+  font-weight: 800;
+  color: #ffc300;
+  text-shadow: 0 0 20px #ffc300, 0 0 40px #e85d04;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2500;
+  white-space: nowrap;
+}
+
+.phase-transition-text.active {
+  animation: phase-transition-anim 2s ease-out forwards;
+}
+
+@keyframes phase-transition-anim {
+  0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+  20%, 80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+}
+
+.contextual-info {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 15, 26, 0.8);
+  padding: 0.5rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #7b2cbf;
+  box-shadow: 0 0 15px rgba(123, 44, 191, 0.5);
+  text-align: center;
+  z-index: 1003; /* CORREÇÃO: Garante que a mensagem fique acima do bloqueador do tutorial */
+  /* **CORREÇÃO DEFINITIVA**: Impede que a caixa de texto bloqueie cliques no campo.
+     Os cliques devem "passar através" dela. Os botões internos (como 'Próximo') 
+     terão seu próprio pointer-events reativado. */
+  pointer-events: none;
+}
+
+/* Classe para garantir que a mensagem do tutorial fique sempre visível */
+.contextual-info.tutorial-active {
+  z-index: 1003;
+}
+
+.contextual-info.tribute-mode {
+  border-color: #c095e6;
+  box-shadow: 0 0 20px #c095e6;
+  animation: tutorial-pulse 1.5s infinite;
+}
+
+.contextual-info p {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.tutorial-progress {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffc300;
+  background-color: rgba(255, 195, 0, 0.1);
+  padding: 3px 8px;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Animações da Hero Page */
+@keyframes title-pulse {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 25px rgba(123, 44, 191, 0.8);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 35px rgba(123, 44, 191, 1);
+  }
+}
+
+@keyframes btn-pulse {
+  /* Esta animação não é mais necessária com o novo design */
+}
+
+@keyframes border-flow {
+  0% {
+    border-image: linear-gradient(135deg, transparent 30%, #48cae4 50%, transparent 70%);
+    border-image-slice: 1;
+  }
+  50% {
+    border-image: linear-gradient(225deg, transparent 30%, #48cae4 50%, transparent 70%);
+    border-image-slice: 1;
+  }
+  100% {
+    border-image: linear-gradient(135deg, transparent 30%, #48cae4 50%, transparent 70%);
+    border-image-slice: 1;
+  }
+}
+
+@keyframes btn-glitch {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 2px); }
+  75% { transform: translate(2px, 2px); }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(20px);
+  }
+}
+
+@keyframes can-attack-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px #ffc300, inset 0 0 10px rgba(255, 195, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px #ffc300, inset 0 0 15px rgba(255, 195, 0, 0.7);
+  }
+}
+
+/* Estilo para o destaque do tutorial */
+.tutorial-highlight {
+  z-index: 1001; /* Acima do overlay do tutorial */
+  box-shadow: 0 0 20px 10px #ffc300, inset 0 0 15px #ffc300;
+  border-radius: 10px;
+  animation: tutorial-pulse 1.5s infinite;
+}
+
+.tutorial-message-box {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+}
+
+/* Garante que o destaque do tutorial seja visível no SVG */
+[id^="p-monster-"].tutorial-highlight {
+  fill: rgba(255, 195, 0, 0.4) !important;
+}
+
+@keyframes tutorial-pulse {
+  0%, 100% { box-shadow: 0 0 20px 10px #ffc300, inset 0 0 15px #ffc300; }
+  50% { box-shadow: 0 0 30px 15px #ffc300, inset 0 0 20px #ffc300; }
+}
+
+.tutorial-highlight-ring {
+  position: fixed;
+  border: 4px solid #ffc300;
+  border-radius: 15px;
+  box-shadow: 0 0 20px 10px #ffc300, inset 0 0 15px #ffc300;
+  z-index: 1002; /* Fica acima do bloqueador de cliques */
+  pointer-events: none; /* O anel em si não é clicável */
+  animation: tutorial-pulse 1.5s infinite;
+  transition: all 0.2s ease-out; /* Suaviza a mudança de posição */
+}
+
+.btn.tutorial-highlight-button {
+  border-color: #ffc300;
+  color: #ffc300;
+  animation: tutorial-button-pulse 2s infinite;
+}
+
+.tutorial-message-box .btn {
+  margin-top: 1rem;
+  pointer-events: all; /* Reativa os cliques apenas para o botão 'Próximo' */
+}
+
+@keyframes center-line-flicker {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px #7b2cbf, 0 0 20px #7b2cbf;
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 15px #7b2cbf, 0 0 30px #ffc300;
+  }
+}
+
+@keyframes phase-pulse {
+  0%, 100% {
+    text-shadow: 0 0 8px #ffc300;
+  }
+  50% {
+    text-shadow: 0 0 16px #ffc300, 0 0 20px #ffc300;
+  }
+}
+
+@keyframes target-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px 5px #c095e6; /* Corrigido para roxo */
+  }
+  50% {
+    box-shadow: 0 0 30px 10px #c095e6; /* Corrigido para roxo */
+  }
+}
+
+/* Estilos da Tela de Fim de Jogo */
+.endgame-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.8);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+  animation: fade-in 0.5s ease;
+}
+
+.endgame-modal {
+  text-align: center;
+  padding: 3rem;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90vw;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: endgame-slide-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.endgame-modal.win {
+  background: radial-gradient(circle, #1e1e2f, #0a0f1a);
+  border: 2px solid #ffc300;
+  box-shadow: 0 0 40px #ffc300;
+}
+
+.endgame-modal.lose {
+  background: radial-gradient(circle, #2a0033, #0a0f1a);
+  border: 2px solid #7b2cbf;
+  box-shadow: 0 0 40px #7b2cbf;
+}
+
+.endgame-main-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.endgame-player-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.endgame-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid;
+  transition: all 0.5s ease;
+}
+
+.endgame-avatar.winner {
+  border-color: #ffc300;
+  box-shadow: 0 0 20px #ffc300;
+  transform: scale(1.1);
+}
+
+.endgame-avatar.loser {
+  border-color: #6c757d;
+  filter: grayscale(80%);
+  transform: scale(0.9);
+}
+
+.endgame-player-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.endgame-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.endgame-title {
+  font-size: 6rem;
+  font-weight: 700;
+  text-shadow: 0 0 20px currentColor;
+  margin-bottom: 1rem;
+  margin: 0;
+}
+
+.endgame-message {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.endgame-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.endgame-reward {
+  font-size: 1.2rem;
+  color: #ffc300;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px #ffc300;
+  margin: 0;
+}
+
+.endgame-mvp {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mvp-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #48cae4;
+  margin: 0;
+}
+
+.mvp-card {
+  width: 100px;
+  height: 145px;
+  background-size: cover;
+  border-radius: 5px;
+  border: 2px solid #ffc300;
+}
+
+@keyframes endgame-slide-in {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Estilos do Cara ou Coroa */
+.cointoss-overlay {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background-color: #0a0f1a;
+  overflow: hidden; /* Impede que elementos apareçam antes da animação */
+}
+
+.cointoss-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem; /* Espaço entre os avatares e o texto */
+  animation: cointoss-fade-in 0.5s ease-out;
+}
+
+.cointoss-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* Reduz o espaço entre os avatares */
+}
+
+.cointoss-avatar {
+  text-align: center;
+  opacity: 0.5;
+  transition: all 0.3s ease-in-out;
+}
+
+.cointoss-avatar#cointoss-player {
+  animation: slide-in-left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.cointoss-avatar#cointoss-ai {
+  animation: slide-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.cointoss-avatar.selected {
+  opacity: 1;
+  transform: scale(1.15); /* Um pouco maior para mais destaque */
+  text-shadow: 0 0 15px #ffc300;
+}
+
+.cointoss-avatar img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid #1e1e2f;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.cointoss-avatar.selected img {
+  border-color: #ffc300;
+  box-shadow: 0 0 30px #ffc300, 0 0 50px #7b2cbf; /* Brilho mais intenso */
+}
+
+.cointoss-avatar.loser {
+    opacity: 0.2;
+    transform: scale(0.9);
+    filter: grayscale(80%);
+}
+
+.cointoss-vs {
+  font-size: 4rem;
+  color: #7b2cbf;
+  opacity: 0;
+  animation: cointoss-fade-in 0.5s 0.8s ease-out forwards;
+}
+
+.cointoss-text {
+  margin-top: 0;
+  font-size: 2rem;
+  color: #48cae4;
+}
+
+/* Animações de Transição de Tela */
+.screen-fade-out {
+  animation: screen-fade-out 0.5s ease-out forwards;
+}
+
+.screen-fade-in {
+  animation: screen-fade-in 0.5s ease-in;
+}
+
+@keyframes screen-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes screen-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cointoss-fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 0.5; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 0.5; }
+}
+
+/* Estilos do Menu de Ajuda */
+.help-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.85);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 1400; /* Abaixo da biblioteca, mas acima do resto */
+}
+
+.help-menu-modal {
+  width: 90%;
+  max-width: 700px;
+  background-color: #1e1e2f;
+  border: 2px solid #48cae4;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(72, 202, 228, 0.4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.help-menu-title {
+  text-align: center;
+  color: #48cae4;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.help-menu-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: 1px solid #48cae4;
+  color: #48cae4;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.help-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-section {
+  max-height: 50vh; /* Define uma altura máxima (50% da altura da tela) */
+  overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
+  padding-right: 1rem; /* Espaço para a barra de rolagem não cobrir o texto */
+}
+
+.accordion .faq-item {
+  background-color: rgba(10, 15, 26, 0.5);
+  border-radius: 8px;
+  border-left: 3px solid #7b2cbf;
+  margin-bottom: 1rem;
+  overflow: hidden; /* Garante que o conteúdo não vaze durante a animação */
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #cdeefd;
+}
+
+.faq-question svg {
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question svg {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 300px; /* Altura suficiente para a resposta */
+  padding: 0 1rem 1rem 1rem;
+}
+
+.faq-item p {
+  font-family: 'Roboto', sans-serif; /* Fonte mais legível */
+  font-size: 1rem;
+  line-height: 1.6; /* Melhora o espaçamento entre linhas */
+  color: #e0e0e0; /* Um cinza claro, mais suave que o branco puro */
+}
+
+/* Estilos da Loja */
+.shop-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.85);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 1600;
+}
+
+.shop-modal {
+  width: 90%;
+  max-width: 600px;
+  background-color: #1e1e2f;
+  border: 2px solid #7b2cbf;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(123, 44, 191, 0.6);
+  position: relative;
+}
+
+.shop-title {
+  text-align: center;
+  color: #7b2cbf;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+}
+
+.shop-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: 1px solid #7b2cbf;
+  color: #7b2cbf;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.shop-credits {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #cdeefd;
+}
+
+.credit-amount {
+  color: #ffc300;
+  font-weight: bold;
+}
+
+.pack-item {
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Estilos do Deck Builder */
+.deck-builder-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.9);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 1700;
+}
+
+.deck-builder-modal {
+  width: 95%;
+  max-width: 1200px;
+  max-height: 90vh; /* Usa max-height para flexibilidade */
+  background-color: #1e1e2f;
+  border: 2px solid #48cae4;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 40px rgba(72, 202, 228, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Adiciona scroll se o conteúdo transbordar com o zoom */
+}
+
+.deck-builder-title {
+  text-align: center;
+  color: #48cae4;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+}
+
+.filter-pane {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-pane input, .filter-pane select {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: rgba(10, 15, 26, 0.8);
+  border: 1px solid #48cae4;
+  border-radius: 5px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+}
+
+.filter-pane input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.deck-builder-content {
+  display: flex;
+  gap: 2rem;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.collection-pane, .deck-pane, .detail-pane {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(10, 15, 26, 0.5);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.collection-pane, .deck-pane {
+  width: 35%;
+}
+
+.detail-pane {
+  width: 30%;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-pane .detail-card-image {
+  width: 80%;
+  border-radius: 8px;
+}
+
+.detail-pane .detail-card-name {
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.detail-pane .detail-card-effect {
+  height: 150px;
+}
+
+.collection-pane h3, .deck-pane h3, .detail-pane h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #ffc300;
+}
+
+.card-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 10px;
+}
+
+.card-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem;
+  border-bottom: 1px solid rgba(72, 202, 228, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.card-list-item:hover {
+  background-color: #7b2cbf;
+}
+
+.deck-builder-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* --- Estilos para Renderização Dinâmica de Cartas --- */
+.card-render-container {
+  width: 827px;  /* Largura exata do template */
+  height: 1024px; /* Altura exata do template */
+  position: relative;
+  background-size: cover;
+  color: black;
+  font-family: 'Roboto Mono', monospace; /* Fonte padrão para a descrição */
+  /* A escala (transform: scale) deve ser aplicada no container PAI para não distorcer as coordenadas internas */
+}
+
+/* Templates de Fundo */
+.card-render-container.monster {
+  background-image: url('/assets/img/card.png');
+}
+.card-render-container.spell {
+  background-image: url('/assets/img/spell-card.png');
+}
+.card-render-container.trap {
+  background-image: url('/assets/img/trap-card.png');
+}
+
+.card-render-name {
+  position: absolute;
+  top: 74px;
+  left: 84px;
+  width: 660px;
+  height: 80px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.2rem; /* Reduzido para caber melhor */
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 2px 2px 4px #000;
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Impede a quebra de linha */
+  overflow: hidden; /* Esconde o que transbordar */
+  text-overflow: ellipsis; /* Adiciona "..." se o nome for muito grande */
+  z-index: 3; /* Camada mais alta */
+}
+
+.card-render-level-stars {
+  position: absolute;
+  /* Coordenadas estimadas */
+  top: 160px;
+  right: 84px;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 4px;
+  z-index: 3; /* Camada mais alta */
+}
+
+.card-render-level-stars span {
+  font-size: 2.5rem; /* Tamanho do emoji */
+}
+
+.card-render-art {
+  position: absolute;
+  top: 210px;
+  left: 84px;
+  width: 660px;
+  height: 480px;
+  z-index: 1; /* Camada intermédia, acima do fundo */
+}
+
+.card-render-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-render-description {
+  position: absolute;
+  top: 720px;   /* y from layoutConfig */
+  left: 84px;   /* x from layoutConfig */
+  width: 660px; /* width from layoutConfig */
+  height: 200px;/* height from layoutConfig */
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  box-sizing: border-box;
+  z-index: 2; /* Acima da arte, abaixo do texto */
+}
+
+.card-render-description .type-line {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 1.9rem;
+}
+
+.card-render-description .effect-text {
+  font-size: 1.7rem;
+  line-height: 1.4;
+  flex-grow: 1;
+  overflow-y: auto; /* Adiciona barra de rolagem se o texto transbordar */
+  padding-right: 10px; /* Espaço para a barra de rolagem */
+}
+
+.card-render-stats {
+  position: absolute;
+  top: 940px;
+  left: 550px;
+  width: 200px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1.9rem;
+  z-index: 3; /* Camada mais alta */
+}
+
+
+
+.cointoss-avatar.selected .cointoss-text {
+  animation: cointoss-fade-in 0.5s forwards;
+}
+
+/* Animações da Hero Page */
+@keyframes hero-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-elements-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes attack-shake {
+  0%, 100% { transform: scale(1.1) translateY(-10px) translateX(0); }
+  25% { transform: scale(1.1) translateY(-10px) translateX(-5px); }
+  75% { transform: scale(1.1) translateY(-10px) translateX(5px); }
+}
+
+@keyframes defend-shake {
+  0%, 100% { transform: scale(1) rotate(0); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+
+.card-on-field.defense-position.defending {
+  animation: defend-shake-horizontal 0.3s;
+}
+
+/* --- Animação de Ataque Direto --- */
+.direct-attack-animation {
+  z-index: 2000; /* Garante que a animação fique por cima de tudo */
+  pointer-events: none;
+  opacity: 1;
+  transform: scale(1.2); /* Começa um pouco maior para dar impacto */
+  box-shadow: 0 0 25px 10px #e63946;
+}
+
+.direct-attack-animation.animate {
+  animation: direct-attack-fly 1s ease-in forwards;
+}
+
+@keyframes direct-attack-fly {
+  0% {
+    transform: translate(0, 0) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--attack-translate-x), var(--attack-translate-y)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* --- Animação de Invocação --- */
+.summon-animation {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+  animation: summon-fly 0.6s ease-out forwards;
+}
+
+@keyframes summon-fly {
+  0% {
+    transform: translate(var(--start-x), var(--start-y)) scale(1.1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(calc(var(--start-x) + (var(--end-x) - var(--start-x)) / 2), calc(var(--start-y) + (var(--end-y) - var(--start-y)) / 2 - 50px)) scale(1.2);
+  }
+  100% {
+    transform: translate(var(--end-x), var(--end-y)) scale(1);
+    opacity: 0; /* Desaparece ao chegar, pois a carta real será renderizada pelo updateUI */
+  }
+}
+
+
+/* --- Animação de Tremor de Ecrã --- */
+.screen-shake {
+  animation: screen-shake-animation 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes screen-shake-animation {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+/* --- Animação de Dano no Avatar --- */
+.avatar-damage {
+  animation: avatar-damage-effect 0.6s ease-in-out;
+}
+
+@keyframes avatar-damage-effect {
+  0% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); box-shadow: 0 0 20px 5px #e63946; }
+  20%, 40%, 60%, 80% { transform: translateX(5px); box-shadow: 0 0 20px 5px #e63946; }
+  100% {
+    transform: translateX(0);
+    /* Mantém a sombra original do avatar */
+    box-shadow: 0 0 10px #48cae4;
+  }
+}
+
+/* --- Animação de Destruição de Carta --- */
+.card-destroyed {
+  animation: card-destruction-effect 0.8s ease-out forwards;
+  pointer-events: none; /* Impede interação durante a animação */
+}
+
+@keyframes card-destruction-effect {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) rotate(10deg);
+    opacity: 0;
+    filter: grayscale(1) blur(3px) brightness(0.5);
+  }
+}
+
+/* --- Animação de Compra de Carta --- */
+.draw-card-animation {
+  position: fixed;
+  width: 80px; /* Tamanho inicial da carta */
+  height: 116px;
+  background-image: url('../assets/img/card-back.png');
+  background-size: cover;
+  border-radius: 5px;
+  z-index: 2100; /* Garante que fique por cima de tudo */
+  pointer-events: none;
+  transform-style: preserve-3d;
+  animation: draw-card-fly 1.2s ease-out forwards;
+}
+
+@keyframes draw-card-fly {
+  0% {
+    transform: translate(var(--start-x), var(--start-y)) rotate(0deg) scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(calc(var(--start-x) + (var(--end-x) - var(--start-x)) / 2), calc(var(--start-y) + (var(--end-y) - var(--start-y)) / 2 - 100px)) rotateY(180deg) scale(1.2);
+    opacity: 1;
+  }
+  99% {
+    transform: translate(var(--end-x), var(--end-y)) rotateY(180deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0; /* Desaparece ao chegar ao destino, pois a carta real aparecerá na mão */
+  }
+}
+
+/* --- Animação de Dano Flutuante --- */
+.floating-damage-number {
+  position: fixed;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #e63946;
+  text-shadow: 0 0 5px #fff, 0 0 10px #e63946, 0 0 15px #000;
+  z-index: 2200;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: float-up-and-fade 2s ease-out forwards;
+}
+
+@keyframes float-up-and-fade {
+  0% {
+    transform: translate(-50%, 0) scale(0.8);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-50%, -30px) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -120px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* --- Estilos do Menu de Ação Contextual --- */
+.action-menu {
+  position: fixed;
+  background-color: rgba(30, 30, 47, 0.95);
+  border: 1px solid #7b2cbf;
+  border-radius: 8px;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  animation: fade-in 0.1s ease-out;
+}
+
+.action-menu button {
+  background: none;
+  border: none;
+  color: #cdeefd;
+  padding: 10px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.action-menu button:hover:not(:disabled) {
+  background-color: #7b2cbf;
+  color: #fff;
+}
+
+.action-menu button:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* --- Estilos do Modal do Cemitério --- */
+.graveyard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.85);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 1550; /* Acima da biblioteca, mas abaixo de outros modais se necessário */
+  animation: fade-in 0.3s ease;
+}
+
+.graveyard-modal {
+  width: 90%;
+  max-width: 1000px;
+  max-height: 85vh;
+  background-color: #1e1e2f;
+  border: 2px solid #7b2cbf;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(123, 44, 191, 0.6);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.graveyard-title {
+  text-align: center;
+  color: #c095e6;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.graveyard-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: 1px solid #7b2cbf;
+  color: #7b2cbf;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.graveyard-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.graveyard-card-item {
+  width: 100px;
+  height: 145px;
+  background-size: cover;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.graveyard-card-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ffc300;
+}
+
+/* --- Estilos para Efeitos Temporários em Cartas --- */
+.card-on-field.has-temp-effect {
+  animation: temp-effect-pulse 1.5s infinite;
+}
+
+/* Ícone para bônus de ATK */
+.card-on-field.atk-boosted::after {
+  content: '▲';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ff00; /* Verde brilhante para indicar aumento */
+  text-shadow: 0 0 5px #000, 0 0 10px #00ff00;
+  animation: icon-pulse 1.5s infinite;
+}
+
+@keyframes temp-effect-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px #00ffff, inset 0 0 10px rgba(0, 255, 255, 0.5);
+    border-color: #00ffff;
+  }
+  50% {
+    box-shadow: 0 0 25px #00ffff, inset 0 0 15px rgba(0, 255, 255, 0.7);
+    border-color: #99ffff;
+  }
+}
+
+@keyframes icon-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Adicionar ao final de styles/main.css */
+
+.contextual-info.tutorial-bottom { /* **CORREÇÃO**: Adicionado o ponto que faltava. */
+  top: auto;
+  bottom: 25%; /* Posiciona acima da mão do jogador */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* --- NOVO: Container para o botão de sair --- */
+.exit-duel-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 101; /* Garante que fique acima do tabuleiro, mas abaixo de modais */
+  pointer-events: all;
+}
+
+/* --- Estilos para o Painel Esquerdo (Log/Cemitério) --- */
+.left-panel-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.left-panel-title {
+  text-align: center;
+  color: #ffc300;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #7b2cbf;
+}
+
+.graveyard-card-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 10px;
+}
+
+.graveyard-list-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  background-color: rgba(10, 15, 26, 0.6);
+  cursor: default;
+  transition: background-color 0.2s;
+}
+
+.graveyard-list-item:hover {
+  background-color: #7b2cbf;
+}
+
+/* --- Media Queries para Responsividade --- */
+
+/* Telas menores em modo paisagem (tablets, celulares maiores) */
+@media (max-width: 1200px) and (orientation: landscape) {
+  .title {
+    font-size: 5rem;
+  }
+  .subtitle {
+    font-size: 1.5rem;
+  }
+  .card-slot {
+    width: 7vw;
+    height: 10vw;
+  }
+  .card-in-hand {
+    width: 9vw;
+    height: 13vw;
+  }
+}
+
+/* --- Media Queries para Responsividade --- */
+@media (max-width: 1024px) and (orientation: landscape) {
+  /* Ajusta o tamanho das cartas para telas menores */
+  .card-slot {
+    width: 8.5vw;
+    height: 12vw;
+  }
+
+  .card-in-hand {
+    width: 10vw;
+    height: 14.5vw;
+  }
+
+  /* Ajusta o tamanho da carta em defesa */
+  .card-on-field.defense-position {
+    width: 12vw;
+    height: 8.5vw;
+  }
+
+  /* Reduz o espaço entre as cartas na mão */
+  .hand-container {
+    gap: 5px;
+  }
+
+  .hud-left, .hud-right {
+    width: clamp(180px, 22vw, 250px);
+    padding: 10px;
+    gap: 0.5rem;
+  }
+
+  /* Garante que os botões sejam fáceis de tocar */
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .hud-btn {
+    padding: 0.8rem; /* Aumenta a área de toque interna */
+    font-size: 0.9rem;
+    min-height: 44px; /* Garante uma altura mínima para o toque */
+  }
+
+  /* Melhora a legibilidade do log */
+
+  /* Torna o modal de detalhes mais adaptável */
+  .card-detail-modal-content {
+    width: clamp(280px, 80vw, 320px);
+    padding: 15px;
+  }
+
+  .detail-card-name {
+    font-size: 1.1rem;
+  }
+
+  .detail-card-effect {
+    font-size: 0.9rem;
+  }
+}

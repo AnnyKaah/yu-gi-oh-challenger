@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <!-- Gradientes -->
+    <linearGradient id="grad-split" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a0033"/>
+      <stop offset="50%" stop-color="#0B0B0B"/>
+      <stop offset="100%" stop-color="#0a2a3a"/>
+    </linearGradient>
+
+    <!-- Padrões -->
+    <pattern id="circuitPattern" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M0 40 H80" stroke="#7b2cbf" stroke-width="0.8" opacity="0.2" stroke-dasharray="10,5">
+        <animate attributeName="stroke-dashoffset" values="0;15" dur="3s" repeatCount="indefinite"/>
+      </path>
+    </pattern>
+
+    <!-- Filtros -->
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="2" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fundo base -->
+  <rect width="1920" height="1080" fill="url(#grad-split)"/>
+
+  <!-- Grid de fundo sutil -->
+  <rect width="1920" height="1080" fill="url(#circuitPattern)" opacity="0.04"/>
+
+  <!-- Linhas animadas horizontais -->
+  <line x1="0" y1="540" x2="1920" y2="540" stroke="#7b2cbf" stroke-width="1.5" opacity="0.15" filter="url(#neonGlow)" stroke-dasharray="30,20">
+    <animate attributeName="stroke-dashoffset" values="0;50" dur="4s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Linhas animadas verticais -->
+  <line x1="960" y1="0" x2="960" y2="1080" stroke="#7b2cbf" stroke-width="1.5" opacity="0.15" filter="url(#neonGlow)" stroke-dasharray="25,15">
+    <animate attributeName="stroke-dashoffset" values="0;40" dur="5s" repeatCount="indefinite" begin="1s"/>
+  </line>
+
+  <!-- Linhas diagonais suaves (efeito de profundidade) -->
+  <line x1="0" y1="0" x2="1920" y2="1080" stroke="#48cae4" stroke-width="0.8" opacity="0.08" stroke-dasharray="50,30">
+    <animate attributeName="stroke-dashoffset" values="0;80" dur="6s" repeatCount="indefinite"/>
+  </line>
+  <line x1="1920" y1="0" x2="0" y2="1080" stroke="#48cae4" stroke-width="0.8" opacity="0.08" stroke-dasharray="50,30">
+    <animate attributeName="stroke-dashoffset" values="0;80" dur="6s" repeatCount="indefinite" begin="2s"/>
+  </line>
+
+  <!-- Acentos de cor nas bordas (para guiar visualmente) -->
+  <rect x="0" y="0" width="1920" height="1080" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+</svg>

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <!-- Gradiente de fundo -->
+    <radialGradient id="grad-bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0B001F"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Gradiente de fluxo de dados -->
+    <linearGradient id="grad-flow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF29D2"/>
+      <stop offset="50%" stop-color="#FF00FF"/>
+      <stop offset="100%" stop-color="#00FFFF"/>
+    </linearGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fundo -->
+  <rect width="1920" height="1080" fill="url(#grad-bg)"/>
+
+  <!-- Chão em perspectiva (data-scape) -->
+  <g stroke="#4422FF" stroke-width="1" opacity="0.2" fill="none">
+    <!-- Linhas horizontais -->
+    <g id="grid-horizontal">
+      <line x1="0" y1="900" x2="1920" y2="900"/>
+      <line x1="0" y1="850" x2="1920" y2="850"/>
+      <line x1="0" y1="800" x2="1920" y2="800"/>
+      <line x1="0" y1="750" x2="1920" y2="750"/>
+      <line x1="0" y1="700" x2="1920" y2="700"/>
+    </g>
+    <!-- Linhas convergindo em perspectiva -->
+    <line x1="960" y1="540" x2="0" y2="1080"/>
+    <line x1="960" y1="540" x2="1920" y2="1080"/>
+    <line x1="960" y1="540" x2="480" y2="1080"/>
+    <line x1="960" y1="540" x2="1440" y2="1080"/>
+  </g>
+
+  <!-- Fluxos de dados pulsantes -->
+  <g stroke="url(#grad-flow)" stroke-width="2" fill="none" opacity="0.4" filter="url(#glow)">
+    <path d="M0 600 C480 580, 960 620, 1920 600">
+      <animate attributeName="d" values="
+        M0 600 C480 580, 960 620, 1920 600;
+        M0 610 C480 590, 960 610, 1920 610;
+        M0 600 C480 580, 960 620, 1920 600
+      " dur="5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0 700 C480 680, 960 720, 1920 700">
+      <animate attributeName="d" values="
+        M0 700 C480 680, 960 720, 1920 700;
+        M0 710 C480 690, 960 710, 1920 710;
+        M0 700 C480 680, 960 720, 1920 700
+      " dur="6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Partículas flutuantes (parallax) -->
+  <g fill="#FF29D2" opacity="0.6">
+    <circle cx="500" cy="300" r="3">
+      <animate attributeName="cy" values="300;800;300" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1400" cy="400" r="4">
+      <animate attributeName="cy" values="400;900;400" dur="10s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="900" cy="200" r="2">
+      <animate attributeName="cy" values="200;700;200" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1200" cy="600" r="3">
+      <animate attributeName="cy" values="600;1000;600" dur="9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Hexágono central -->
+  <polygon points="960,340 1100,430 1100,650 960,740 820,650 820,430"
+    stroke="#FFD700" stroke-width="4" fill="none" filter="url(#glow)">
+    <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 960 540" to="360 960 540" dur="25s" repeatCount="indefinite"/>
+  </polygon>
+
+  <!-- Brilho central pulsante -->
+  <circle cx="960" cy="540" r="10" fill="#FF29D2" filter="url(#glow)">
+    <animate attributeName="r" values="10;25;10" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

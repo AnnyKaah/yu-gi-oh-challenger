@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <pattern id="hex-grid" width="100" height="86.6" patternUnits="userSpaceOnUse">
+      <path d="M50 0 L100 25 L100 75 L50 100 L0 75 L0 25 Z" fill="none" stroke="#7C4DFF" stroke-width="0.5" opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#0B0B0B"/>
+  <rect width="1920" height="1080" fill="url(#hex-grid)"/>
+
+  <!-- Barra lateral -->
+  <rect x="0" y="0" width="200" height="1080" fill="#D4AF37" opacity="0.1"/>
+  <text x="100" y="100" fill="#D4AF37" font-family="Orbitron" font-size="22" text-anchor="middle">GUIA</text>
+
+  <!-- Efeitos de brilho -->
+  <circle cx="800" cy="500" r="2" fill="#00FFE1">
+    <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1500" cy="800" r="3" fill="#FF29D2">
+    <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>
